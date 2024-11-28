@@ -1,6 +1,7 @@
 package br.com.fiap.soat7.grupo18.lanchonete.payment.handler.dto;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
@@ -16,7 +17,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@JsonPropertyOrder({"id_pedido", "pagamento"})
+@JsonPropertyOrder({"id_pedido", "transactionID", "pagamento", "paymentTime"})
 public class PaymentResponseDto implements Serializable{
 
     /**
@@ -27,6 +28,11 @@ public class PaymentResponseDto implements Serializable{
     @JsonProperty("id_pedido")
     private String idPedido;
 
+    private String transactionID;
+
     private boolean pagamento;
+
+    @Builder.Default
+    private LocalDateTime paymentTime = LocalDateTime.now();
 
 }
