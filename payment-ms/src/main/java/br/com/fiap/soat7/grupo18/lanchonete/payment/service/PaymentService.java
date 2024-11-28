@@ -30,7 +30,7 @@ public class PaymentService {
                                         .map(PaymentProcessorRequest::getPaymentRequestDto).map(PaymentRequestDto::getUrlCallback).orElse("");
         var response = paymentGateway.processPayment(paymentRequest);
         if (!urlCallback.isEmpty()){
-            callbackService.invokeCallback(urlCallback);
+            callbackService.invokeCallback(urlCallback, response);
         }
         return response;
     }
