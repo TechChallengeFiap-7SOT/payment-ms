@@ -57,6 +57,6 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        run: mvn -B verify --file payment-ms/pom.xml org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=TechChallengeFiap-7SOT_payment-ms
+        run: mvn -B verify --file payment-ms/pom.xml org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.organization=techchallengefiap-7sot -Dsonar.projectKey=TechChallengeFiap-7SOT_payment-ms
 
 
