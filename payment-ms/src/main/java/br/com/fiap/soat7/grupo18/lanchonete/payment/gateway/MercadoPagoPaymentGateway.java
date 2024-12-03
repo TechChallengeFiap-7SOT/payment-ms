@@ -31,8 +31,12 @@ public class MercadoPagoPaymentGateway extends AbstractPaymentGateway {
                                                             .appendOffset("+HH:MM", "+00:00")
                                                             .toFormatter();
 
-    @Value("${app.payment.gateway.mercadopago.test-accesstoken}")
+    
     private String testAccessToken;
+
+    public MercadoPagoPaymentGateway(String testAccessToken){
+        this.testAccessToken = testAccessToken;
+    }
 
     @Override
     public PaymentProcessorResponse processPayment(PaymentProcessorRequest request){
@@ -43,7 +47,7 @@ public class MercadoPagoPaymentGateway extends AbstractPaymentGateway {
         try{
             final var item = new MercadoPagoOrderItem();
             item.unitPrice = Double.valueOf(request.getPaymentRequestDto().getValor());
-            item.totalAmount = Double.valueOf(1.0);
+            item.totalAmount = Double.valueOf(request.getPaymentRequestDto().getValor());
 
             final var mapaRequest = Map.of(
                                         "description", request.getPaymentDescription(),
@@ -75,6 +79,24 @@ public class MercadoPagoPaymentGateway extends AbstractPaymentGateway {
 
         @JsonProperty("in_store_order_id")
         private String storeOrderId;
+
+        public String getQrData() {
+            return qrData;
+        }
+
+        public void setQrData(String qrData) {
+            this.qrData = qrData;
+        }
+
+        public String getStoreOrderId() {
+            return storeOrderId;
+        }
+
+        public void setStoreOrderId(String storeOrderId) {
+            this.storeOrderId = storeOrderId;
+        }
+
+        
     }
 
     @SuppressWarnings("unused")

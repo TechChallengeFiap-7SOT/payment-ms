@@ -84,4 +84,14 @@ public class DtoTest {
         assertNotNull(callback.toString());
         assertNotNull(callback.builder().toString());
     }
+
+    @Test
+    void testMercadoPagoApiResponse() throws Exception{
+        var mercadoPagoApiResponse = new MercadoPagoPaymentGateway.MercadoPagoApiResponse();
+        mercadoPagoApiResponse.setQrData("hxzzzzz");
+        mercadoPagoApiResponse.setStoreOrderId("abcdef-1234");
+
+        assertNotNull(mercadoPagoApiResponse.getQrData());
+        assertNotNull(mercadoPagoApiResponse.getStoreOrderId());
+    }
 }
