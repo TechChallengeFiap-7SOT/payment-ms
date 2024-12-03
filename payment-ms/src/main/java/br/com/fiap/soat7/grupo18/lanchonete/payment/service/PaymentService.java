@@ -2,6 +2,7 @@ package br.com.fiap.soat7.grupo18.lanchonete.payment.service;
 
 import java.util.Optional;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,36 +15,51 @@ import br.com.fiap.soat7.grupo18.lanchonete.payment.handler.dto.PaymentRequestDt
 @Service
 public class PaymentService {
 
-
     private AbstractPaymentGateway paymentGateway;
     private CallbackService callbackService;
-    
-    //a implementação do gateway é determinada pela configuração em PaymentGatewayConfig
+
+    // a implementação do gateway é determinada pela configuração em
+    // PaymentGatewayConfig
     public PaymentService(AbstractPaymentGateway paymentGateway, @Autowired CallbackService callbackService) {
         this.paymentGateway = paymentGateway;
         this.callbackService = callbackService;
     }
 
-    public PaymentProcessorResponse processPayment(PaymentProcessorRequest paymentRequest){
+    public PaymentProcessorResponse processPayment(PaymentProcessorRequest paymentRequest) {
         checkPaymentRequest(paymentRequest);
         final String urlCallback = Optional.ofNullable(paymentRequest)
-                                        .map(PaymentProcessorRequest::getPaymentRequestDto).map(PaymentRequestDto::getUrlCallback).orElse("");
+                .map(PaymentProcessorRequest::getPaymentRequestDto).map(PaymentRequestDto::getUrlCallback).orElse("");
         var response = paymentGateway.processPayment(paymentRequest);
-        if (!urlCallback.isEmpty()){
-            callbackService.invokeCallback(urlCallback, response);
+        if (!urlCallback.isEmpty()) {
+            invokeCallback(urlCallback, response);
+
         }
         return response;
     }
-        
+
+    public boolean invokeCallback(String urlCallback, PaymentProcessorResponse response) {
+        try {
+            if (StringUtils.isEmpty(urlCallback)){
+                return false;
+            }
+            callbackService.invokeCallback(urlCallback, response);
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
     private void checkPaymentRequest(PaymentProcessorRequest paymentRequest) {
         final Optional<PaymentProcessorRequest> optPaymentRequest = Optional.ofNullable(paymentRequest);
         final Double MIN_PAYMENT_VALUE = 0.01D;
-        if (!optPaymentRequest.map(PaymentProcessorRequest::getPaymentRequestDto).map(PaymentRequestDto::getIdPedido).isPresent()){
+        if (!optPaymentRequest.map(PaymentProcessorRequest::getPaymentRequestDto).map(PaymentRequestDto::getIdPedido)
+                .isPresent()) {
             throw new RequiredDataException("ID do pedido não informado");
         }
 
-        var valorPedido = optPaymentRequest.map(PaymentProcessorRequest::getPaymentRequestDto).map(PaymentRequestDto::getValor).orElse(0.0D);
-        if (valorPedido < MIN_PAYMENT_VALUE){
+        var valorPedido = optPaymentRequest.map(PaymentProcessorRequest::getPaymentRequestDto)
+                .map(PaymentRequestDto::getValor).orElse(0.0D);
+        if (valorPedido < MIN_PAYMENT_VALUE) {
             throw new RequiredDataException("Valor do pedido inválido. Valor mínimo: 0.01");
         }
     }
