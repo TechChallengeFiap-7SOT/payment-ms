@@ -24,7 +24,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Service
-class CallbackService {
+public class CallbackService {
 
     @Autowired
     private RestTemplate restTemplate;
@@ -60,7 +60,7 @@ class CallbackService {
     @AllArgsConstructor
     @Builder
     @JsonPropertyOrder({"id_pedido", "transactionID", "pagamento"})
-    private static class CallbackDto implements Serializable{
+    public static class CallbackDto implements Serializable{
     
             /**
              *
