@@ -11,10 +11,10 @@ WORKDIR /usr/src/app
 RUN mvn clean package --file payment-ms/pom.xml
 
 # Verifica se o arquivo JAR foi gerado
-RUN if [ ! -f target/*.jar ]; then echo "O arquivo JAR não foi encontrado" && exit 1; fi
+RUN if [ ! -f payment-ms/target/*.jar ]; then echo "O arquivo JAR não foi encontrado" && exit 1; fi
 
 # Move o arquivo JAR gerado para o diretório raiz
-RUN mv target/*.jar /application.jar
+RUN mv payment-ms/target/*.jar /application.jar
 
 # Expõe a porta 8080
 EXPOSE 8080
