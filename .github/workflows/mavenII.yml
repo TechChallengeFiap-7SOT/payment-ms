@@ -80,7 +80,7 @@ jobs:
           uses: docker/build-push-action@v6
           with:
             context: .
-            file: ./payment-ms/Dockerfile
+            #file: ./payment-ms/Dockerfile
             push: true
             tags: jks1903/payment-ms:latest
 
