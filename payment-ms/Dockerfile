@@ -8,7 +8,7 @@ COPY . /usr/src/app
 WORKDIR /usr/src/app
 
 # Compila o projeto e cria o pacote com o Maven
-RUN mvn clean package
+RUN mvn clean package --file payment-ms/pom.xml
 
 # Verifica se o arquivo JAR foi gerado
 RUN if [ ! -f target/*.jar ]; then echo "O arquivo JAR não foi encontrado" && exit 1; fi
